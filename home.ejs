@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <title> Fight! 2E Turn Tracker</title>
+    </head>
+
+    <body>
+        <h1 style="text-align: center;">Fight! 2e Turn Tracker</h1>
+      
+        <p style="text-align: center;">Players</p><br>
+        <p id = "Area"></p>
+        <button id = "pcButton" class = "btn btn-success">Add PC</button>
+        
+        <p style="text-align: center;">Enemies</p> <br>
+        <p id = "npcArea"></p>
+        <button id = "npcButton" class = "btn btn-warning"> Add Enemy</button>
+
+        <!--Add code for the Enemies with a drop down for dice rolls -->
+        <p style="text-align: center;">Current Turn Order</p> <br>
+        
+        <textarea id="BlogText" name = "BlogText" rows="25" cols="20" style="margin: auto;"  ></textarea> <br>
+            <!--Take all the characters and display it here sorted by init-->
+    
+
+        <button id = "textArea" >New Turn Order</button>
+
+        <script> // Script for Adding PC
+
+            let pcArray = [];
+            let npcArray = [];
+            let current = [];
+
+            document.getElementById("pcButton").addEventListener("click", addNewPC);
+            document.getElementById("npcButton").addEventListener("click",addNewNPC);
+            document.getElementById("textArea").addEventListener("click", test);
+
+            var pcCard = `<div class = "container m-3">
+                <div id ="pID" class = "card" >
+                    <div class = "card-body">
+                        <h3 class = "card-title" style=" text-align: center;">
+                           PC: <input type="text" id="pcName" name="pcName">
+                        </h3>
+                        <p class = "card-text" style=" text-align: center;">
+                            Initiative
+                            <input type="text" id="pcInit" name="pcInit">
+                            
+                            Control
+                            <input type="text" id="pcControl" name="pcControl">
+                        </p> 
+                        <!--Add form for adding player name and init and control rolls-->
+                        <button type = "button" class = "card-footer btn btn-sm btn-danger"" >Delete</button>
+                        <!--Add working delete function-->
+                    </div>
+                </div>
+            </div>
+            <br>`
+            var npcCard = `<div class = "container m-3">
+                <div id ="pID" class = "card" >
+                    <div class = "card-body">
+                        <h3 class = "card-title" style=" text-align: center;">
+                            NPC: <input type="text" id="npcName" name="npcName">
+                        </h3>
+                        <p class = "card-text" style=" text-align: center;">Initiative
+                                <select name="NPC INIT" id="initNPC">
+                                    <option value="4">d4</option>
+                                    <option value="6">d6</option>
+                                    <option value="8">d8</option>
+                                    <option value="10">d10</option>
+                                    <option value="12">d12</option>
+                                </select>
+                        Control:
+                                <select name="NPC Control" id="controlNPC">Control
+                                    <option value="4">d4</option>
+                                    <option value="6">d6</option>
+                                    <option value="8">d8</option>
+                                    <option value="10">d10</option>
+                                    <option value="12">d12</option>
+                                </select>
+                        </p> 
+                        <!--Add form for adding player name and init and control rolls-->
+                        <button type = "button" class = "card-footer btn btn-sm btn-danger" >Delete</button>
+                        <!--Add working delete function--
+                    </div>
+                </div>
+            </div>
+            <br>`
+        function addNewPC() {
+            document.getElementById("Area").innerHTML += pcCard;
+            
+            }
+        function addNewNPC(){
+            document.getElementById("npcArea").innerHTML += npcCard;
+        }
+
+        function test(){
+           // var names = document.getElementById("pcName").value;
+           // document.getElementById("BlogText").innerText = names; 
+            let textString = " ";
+            pcArray = [];
+            npcArray = [];
+            current = [];
+
+            pushPC();
+            pushNPC(); 
+
+            current = pcArray.concat(npcArray);
+
+            current.sort(function(a,b){
+                return b.init - a.init
+            });
+            //console.log(pcArray);
+
+            for(j = 0; j < current.length; j++){
+               textString += current[j].name + " " + current[j].init + " " + current[j].control + "\n";
+               //console.log(pcArray[j]);
+            }
+            
+           document.getElementById("BlogText").innerHTML = textString;
+
+        }
+
+        function pushPC(){
+            const pcList = document.querySelectorAll("#pcName");
+            const pcInitList = document.querySelectorAll("#pcInit");
+            const pcControlList = document.querySelectorAll("#pcControl");
+            for( i = 0; i < pcList.length; i++ ){
+                //pcObject.name = pcList[i].value;
+                //pcArray.push(pcList[i].value);
+                //pcObject.init = pcInitList[i].value
+                //pcObject.control = pcControlList[i].value
+                
+                let Object = {name: pcList[i].value, init: parseInt(pcInitList[i].value), control: parseInt(pcControlList[i].value)};
+                pcArray.push(Object);
+                //pcArray.push(pcObject);
+            }
+            //console.log(pcArray);
+            
+        }
+        function pushNPC(){
+            const npcList = document.querySelectorAll("#npcName");
+            const npcInitList = document.querySelectorAll("#initNPC");
+            const npcControlList = document.querySelectorAll("#controlNPC");
+            
+            for( i = 0; i < npcList.length; i++ ){
+                
+               let initDiceSize = parseInt(npcInitList[i].value);
+               let controlDiceSize = parseInt(npcControlList[i].value);
+              
+               let iDice = 0;
+               let cDice = 0;
+
+               iDice = Math.floor(Math.random() * initDiceSize) + 1;
+               cDice = Math.floor(Math.random() * controlDiceSize) + 1;
+
+                let Object = {name: npcList[i].value, init: iDice, control: cDice};
+                npcArray.push(Object);
+                
+            }
+        }
+        </script>
+
+        <script src="/index.js" defer></script>
+    </body>
+
+    
+</html>

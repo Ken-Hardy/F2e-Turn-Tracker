@@ -1,0 +1,17 @@
+{
+  "name": "fight-2e-turn-tracker",
+  "version": "1.0.0",
+  "description": "A Turn Tracker for the Fight! 2e TTRPG System",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kenneth Hardy",
+  "license": "ISC" ,
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "4.19.2",
+    "ejs": "3.1.10"
+  }
+}
